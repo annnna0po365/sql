@@ -1,0 +1,26 @@
+with AggregatedData as (
+ select ad_date,
+'Facebook Ads' as media_source,
+sum(spend) as total_spend,
+sum(impressions) as total_impressions,
+sum(clicks) as total_clicks,
+sum(value) as total_value_conversions
+ from facebook_ads_basic_daily fabd 
+ group by ad_date
+ union 
+ select ad_date,
+'Google Ads' as media_source,
+sum(spend)  as total_spend,
+sum(impressions) as total_impressions,
+sum(clicks)  as total_clicks,
+sum(value) as total_value_conversions
+ from google_ads_basic_daily
+ group by ad_date
+)
+ select ad_date, media_source,
+sum(total_spend) as total_spend,
+sum(total_impressions) as total_impressions,
+sum(total_clicks) as total_clicks,
+sum(total_value_conversions) as total_value_conversions
+ from AggregatedData
+ group by ad_date, media_source;
